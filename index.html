@@ -68,6 +68,12 @@
       text-decoration: underline;
       cursor: pointer;
     }
+
+    @media (max-width: 480px) {
+      .console {
+        height: 250px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -134,7 +140,7 @@
             logMessage(`Found URL: <a href="${url}" target="_blank">${url}</a>`);
           })
           .catch(() => {
-            logMessage(`Error URL then put the URL here Not found: ${url}`, true);
+            logMessage(`Error URL: ${url}`, true);
           });
       }, 1000);
 
