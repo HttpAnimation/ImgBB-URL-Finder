@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ImgBB URL Finder</title>
+  <style>
+    /* Styles for dark mode and modern UI */
+    body {
+      background-color: #282c34;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .console {
+      background-color: #1e1e1e;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      height: 400px;
+      overflow: auto;
+    }
+
+    .btn-group {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+
+    .btn {
+      background-color: #61dafb;
+      border: none;
+      color: #282c34;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 0 5px;
+    }
+
+    .btn:hover {
+      background-color: #5cb8d1;
+    }
+
+    .btn.stop {
+      background-color: #f00;
+      color: #fff;
+    }
+
+    .btn.download {
+      background-color: #00cc00;
+      color: #fff;
+    }
+
+    .error {
+      color: #f00;
+      font-weight: bold;
+    }
+
+    .console a {
+      color: #61dafb;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="btn-group">
+      <button class="btn run">Run</button>
+      <button class="btn stop">Stop</button>
+      <button class="btn download">Download found</button>
+    </div>
+    <div class="console"></div>
+  </div>
+
+  <script>
+    // Function to generate a random alphanumeric string
+    function generateRandomString(length) {
+      const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      let result = '';
+      for (let i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+      }
+      return result;
+    }
+
+    // Function to check if the ImgBB URL exists
+    function checkURL(url) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              resolve(true);
+            } else {
+              reject(false);
+            }
+          }
+        };
+        xhr.open('HEAD', url, true);
+        xhr.send();
+      });
+    }
+
+    // Function to log messages in the console
+    function logMessage(message, isError) {
+      const consoleEl = document.querySelector('.console');
+      const p = document.createElement('p');
+      if (isError) {
+        p.classList.add('error');
+      }
+      p.innerHTML = message;
+      consoleEl.appendChild(p);
+    }
+
+    // Function to start the ImgBB URL generation and checking process
+    function startChecking() {
+      const consoleEl = document.querySelector('.console');
+      consoleEl.innerHTML = '';
+
+      const intervalId = setInterval(() => {
+        const randomString = generateRandomString(Math.floor(Math.random() * 3) + 5);
+        const url = `https://ibb.co/${randomString}`;
+
+        checkURL(url)
+          .then(() => {
+            logMessage(`Found URL: <a href="${url}" target="_blank">${url}</a>`);
+          })
+          .catch(() => {
+            logMessage(`Error URL then put the URL here Not found: ${url}`, true);
+          });
+      }, 1000);
+
+      return intervalId;
+    }
+
+    // Global variables
+    let intervalId = null;
+
+    // Event listeners
+    document.querySelector('.btn.run').addEventListener('click', function() {
+      if (!intervalId) {
+        intervalId = startChecking();
+      }
+    });
+
+    document.querySelector('.btn.stop').addEventListener('click', function() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    });
+
+    document.querySelector('.btn.download').addEventListener('click', function() {
+      const consoleEl = document.querySelector('.console');
+      const foundUrls = consoleEl.querySelectorAll('p:not(.error)');
+      const content = [...foundUrls].map(url => url.innerText).join('\n');
+      const file = new Blob([content], {type: 'text/plain'});
+      const url = URL.createObjectURL(file);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'found_urls.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
