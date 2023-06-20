@@ -75,6 +75,11 @@
       text-decoration: underline;
       cursor: pointer;
     }
+
+    .donate-text {
+      cursor: pointer;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -92,6 +97,7 @@
       <button class="btn speed insane">Insane</button>
     </div>
     <div class="console"></div>
+    <div class="donate-text" id="donation">Donate XRM: 42MtEEWkfvyKqUEQ6fMHYgcsoHmyS3HQq6AUUBRBz6HLXvHTq9hDFdLa1gSfRmkouG89WxGNJ3dz4EBMM1JwpFhRQd9GuqZ</div>
   </div>
 
   <script>
@@ -227,6 +233,19 @@
         clearInterval(intervalId);
         intervalId = startChecking(200); // Insane speed: 200 milliseconds (0.2 seconds)
       }
+    });
+
+    // Donation text click event listener
+    const donationText = document.getElementById('donation');
+    donationText.addEventListener('click', function() {
+      const textToCopy = donationText.innerText;
+      navigator.clipboard.writeText(textToCopy)
+        .then(() => {
+          alert('Donation address copied to clipboard!');
+        })
+        .catch(() => {
+          alert('Failed to copy the donation address. Please copy it manually.');
+        });
     });
   </script>
 </body>
