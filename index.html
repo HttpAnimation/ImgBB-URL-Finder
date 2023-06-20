@@ -65,6 +65,16 @@
       color: #fff;
     }
 
+    .btn.download-all {
+      background-color: #ffa500;
+      color: #fff;
+    }
+
+    .btn.no-limits {
+      background-color: #8a2be2;
+      color: #fff;
+    }
+
     .error {
       color: #f00;
       font-weight: bold;
@@ -90,6 +100,7 @@
       <button class="btn download">Download found</button>
       <button class="btn download-error">Download errors</button>
       <button class="btn download-all">Download all</button>
+      <button class="btn no-limits">No Limits</button>
     </div>
     <div class="btn-group">
       <button class="btn speed slow">Slow</button>
@@ -156,7 +167,7 @@
             logMessage(`Found URL: <a href="${url}" target="_blank">${url}</a>`);
           })
           .catch(() => {
-            logMessage(`Error URL then put the URL here Not found: ${url}`, true);
+            logMessage(`Error URL Not found: ${url}`, true);
           });
       }, speed);
 
@@ -246,6 +257,13 @@
         clearInterval(intervalId);
         intervalId = startChecking(200); // Insane speed: 200 milliseconds (0.2 seconds)
       }
+    });
+
+    document.querySelector('.btn.no-limits').addEventListener('click', function() {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+      intervalId = startChecking(0); // No limits, generate URLs as fast as possible
     });
 
     // Donation text click event listener
