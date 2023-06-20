@@ -25,6 +25,8 @@
       margin-bottom: 10px;
       height: 400px;
       overflow: auto;
+      max-height: 600px; /* Adjust the maximum height as per your needs */
+      overflow-wrap: break-word;
     }
 
     .btn-group {
@@ -67,12 +69,6 @@
       color: #61dafb;
       text-decoration: underline;
       cursor: pointer;
-    }
-
-    @media (max-width: 480px) {
-      .console {
-        height: 250px;
-      }
     }
   </style>
 </head>
@@ -124,6 +120,7 @@
       }
       p.innerHTML = message;
       consoleEl.appendChild(p);
+      consoleEl.scrollTop = consoleEl.scrollHeight; // Auto-scroll to the bottom
     }
 
     // Function to start the ImgBB URL generation and checking process
@@ -140,7 +137,7 @@
             logMessage(`Found URL: <a href="${url}" target="_blank">${url}</a>`);
           })
           .catch(() => {
-            logMessage(`Error URL: ${url}`, true);
+            logMessage(`Error URL then put the URL here Not found: ${url}`, true);
           });
       }, 1000);
 
