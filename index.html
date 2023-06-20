@@ -25,6 +25,8 @@
       margin-bottom: 10px;
       height: 400px;
       overflow: auto;
+      max-height: 600px; /* Adjust the maximum height as per your needs */
+      overflow-wrap: break-word;
     }
 
     .btn-group {
@@ -118,6 +120,7 @@
       }
       p.innerHTML = message;
       consoleEl.appendChild(p);
+      consoleEl.scrollTop = consoleEl.scrollHeight; // Auto-scroll to the bottom
     }
 
     // Function to start the ImgBB URL generation and checking process
