@@ -79,6 +79,12 @@
       <button class="btn stop">Stop</button>
       <button class="btn download">Download found</button>
     </div>
+    <div class="btn-group">
+      <button class="btn speed slow">Slow</button>
+      <button class="btn speed normal">Normal</button>
+      <button class="btn speed fast">Fast</button>
+      <button class="btn speed insane">Insane</button>
+    </div>
     <div class="console"></div>
   </div>
 
@@ -124,7 +130,7 @@
     }
 
     // Function to start the ImgBB URL generation and checking process
-    function startChecking() {
+    function startChecking(speed) {
       const consoleEl = document.querySelector('.console');
       consoleEl.innerHTML = '';
 
@@ -139,7 +145,7 @@
           .catch(() => {
             logMessage(`Error URL then put the URL here Not found: ${url}`, true);
           });
-      }, 1000);
+      }, speed);
 
       return intervalId;
     }
@@ -150,7 +156,7 @@
     // Event listeners
     document.querySelector('.btn.run').addEventListener('click', function() {
       if (!intervalId) {
-        intervalId = startChecking();
+        intervalId = startChecking(1000); // Default speed: 1000 milliseconds (1 second)
       }
     });
 
@@ -172,6 +178,35 @@
       a.download = 'found_urls.txt';
       a.click();
       URL.revokeObjectURL(url);
+    });
+
+    // Speed buttons event listeners
+    document.querySelector('.btn.speed.slow').addEventListener('click', function() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = startChecking(2000); // Slow speed: 2000 milliseconds (2 seconds)
+      }
+    });
+
+    document.querySelector('.btn.speed.normal').addEventListener('click', function() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = startChecking(1000); // Normal speed: 1000 milliseconds (1 second)
+      }
+    });
+
+    document.querySelector('.btn.speed.fast').addEventListener('click', function() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = startChecking(500); // Fast speed: 500 milliseconds (0.5 seconds)
+      }
+    });
+
+    document.querySelector('.btn.speed.insane').addEventListener('click', function() {
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = startChecking(100); // Insane speed: 100 milliseconds (0.1 seconds)
+      }
     });
   </script>
 </body>
