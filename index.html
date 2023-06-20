@@ -89,6 +89,7 @@
       <button class="btn stop">Stop</button>
       <button class="btn download">Download found</button>
       <button class="btn download-error">Download errors</button>
+      <button class="btn download-all">Download all</button>
     </div>
     <div class="btn-group">
       <button class="btn speed slow">Slow</button>
@@ -206,7 +207,19 @@
       URL.revokeObjectURL(url);
     });
 
-    // Speed buttons event listeners
+    document.querySelector('.btn.download-all').addEventListener('click', function() {
+      const consoleEl = document.querySelector('.console');
+      const allUrls = consoleEl.querySelectorAll('p');
+      const content = [...allUrls].map(url => url.innerText).join('\n');
+      const file = new Blob([content], {type: 'text/plain'});
+      const url = URL.createObjectURL(file);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'all_urls.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
     document.querySelector('.btn.speed.slow').addEventListener('click', function() {
       if (intervalId) {
         clearInterval(intervalId);
