@@ -60,6 +60,11 @@
       color: #fff;
     }
 
+    .btn.download-error {
+      background-color: #ff8c00;
+      color: #fff;
+    }
+
     .error {
       color: #f00;
       font-weight: bold;
@@ -78,6 +83,7 @@
       <button class="btn run">Run</button>
       <button class="btn stop">Stop</button>
       <button class="btn download">Download found</button>
+      <button class="btn download-error">Download errors</button>
     </div>
     <div class="btn-group">
       <button class="btn speed slow">Slow</button>
@@ -152,6 +158,7 @@
 
     // Global variables
     let intervalId = null;
+    let errorUrls = []; // Array to store error URLs
 
     // Event listeners
     document.querySelector('.btn.run').addEventListener('click', function() {
@@ -176,6 +183,19 @@
       const a = document.createElement('a');
       a.href = url;
       a.download = 'found_urls.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.querySelector('.btn.download-error').addEventListener('click', function() {
+      const consoleEl = document.querySelector('.console');
+      const errorUrls = consoleEl.querySelectorAll('p.error');
+      const content = [...errorUrls].map(url => url.innerText).join('\n');
+      const file = new Blob([content], {type: 'text/plain'});
+      const url = URL.createObjectURL(file);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'error_urls.txt';
       a.click();
       URL.revokeObjectURL(url);
     });
@@ -205,7 +225,7 @@
     document.querySelector('.btn.speed.insane').addEventListener('click', function() {
       if (intervalId) {
         clearInterval(intervalId);
-        intervalId = startChecking(100); // Insane speed: 100 milliseconds (0.1 seconds)
+        intervalId = startChecking(200); // Insane speed: 200 milliseconds (0.2 seconds)
       }
     });
   </script>
